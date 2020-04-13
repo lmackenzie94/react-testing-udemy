@@ -5,13 +5,13 @@ import Congrats from './Congrats';
 import { findByTestAttr, checkProps } from '../test/testUtils';
 import languageContext from './contexts/languageContext';
 
-const defaultProps = { success: false };
+// const defaultProps = { success: false };
 
 /**
  * Factory function to create a ShallowWrapper for the Congrats component.
  * @function setup
  * @param {object} testValues - Context values specific to this setup.
- * @returns {ShallowWrapper}
+ * @returns {ReactWrapper}
  */
 const setup = ({ success, language }) => {
   language = language || 'en';
