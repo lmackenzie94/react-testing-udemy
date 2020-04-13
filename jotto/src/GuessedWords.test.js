@@ -61,3 +61,20 @@ describe('if there are words guessed', () => {
     expect(guessedWordsNodes.length).toBe(guessedWords.length);
   });
 });
+
+// unlike how we tested Context in Input & Congrats, here we are mocking useContext
+describe('languagePicker', () => {
+  test('correctly renders guess instructions string in English by default', () => {
+    // don't have to mock useContext here, just let it run
+    const wrapper = setup({ guessedWords: [] }); // empty array so it displays the instructions
+    const guessInstructions = findByTestAttr(wrapper, 'guess-instructions');
+    expect(guessInstructions.text()).toBe('Try to guess the secret word!');
+  });
+  test('correctly renders guess instructions string in emoji', () => {
+    const mockUseContext = jest.fn().mockReturnValue('emoji');
+    React.useContext = mockUseContext;
+    const wrapper = setup({ guessedWords: [] }); // empty array so it displays the instructions
+    const guessInstructions = findByTestAttr(wrapper, 'guess-instructions');
+    expect(guessInstructions.text()).toBe('🤔🤫🔤');
+  });
+});
