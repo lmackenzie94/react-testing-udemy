@@ -1,12 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-// import GuessedWords from './GuessedWords';
 // import Congrats from './Congrats';
 import hookActions from './actions/hookActions';
 import languageContext from './contexts/languageContext';
+import successContext from './contexts/successContext';
+import guessedWordsContext from './contexts/guessedWordsContext';
 
 import LanguagePicker from './LanguagePicker';
 import Input from './Input';
+import Congrats from './Congrats';
+import GuessedWords from './GuessedWords';
 
 /**
  * reducer to update state, called automatically by dispatch
@@ -35,7 +38,7 @@ const App = () => {
 
   const setSecretWord = (secretWord) =>
     dispatch({ type: 'setSecretWord', payload: secretWord });
-  const setLanguage = ({ language }) =>
+  const setLanguage = (language) =>
     dispatch({ type: 'setLanguage', payload: language });
 
   React.useEffect(() => {
@@ -58,11 +61,21 @@ const App = () => {
   return (
     <div className="container" data-test="component-app">
       <h1>Jotto</h1>
+      {/* the below <p> is just for testing */}
+      <p>The secret word is {state.secretWord}</p>
       {/* 'value' is reachable from anywhere within the provider, at any level */}
       {/* any time state.language changes, all children will re-render */}
       <languageContext.Provider value={state.language}>
+        {/* passing the setter works here when component is just one level deep */}
         <LanguagePicker setLanguage={setLanguage} />
-        <Input secretWord={state.secretWord} />
+        <guessedWordsContext.GuessedWordsProvider>
+          {/* don't need 'value' bc it's baked in to the SuccessProvider */}
+          <successContext.SuccessProvider>
+            <Congrats />
+            <Input secretWord={state.secretWord} />
+          </successContext.SuccessProvider>
+          <GuessedWords />
+        </guessedWordsContext.GuessedWordsProvider>
       </languageContext.Provider>
     </div>
   );
